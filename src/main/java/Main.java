@@ -34,9 +34,37 @@ public class Main {
     WebElement aceptar = driver.findElement(new By.ByClassName("NN0_TB_DIsNmMHgJWgT7U"));
     aceptar.click();
 
-    WebElement wikiTable = driver.findElement(new By.ByClassName("wikitable"));
+    //WebElement wikiTable = driver.findElement(new By.ByClassName("wikitable"));
+    List<WebElement> wikiTables = driver.findElements(new By.ByClassName("wikitable"));
 
-    List<WebElement> filas = driver.findElements(new By.ByTagName("tr"));
+    for (WebElement wikitable : wikiTables) {
+      List<WebElement> filasWikiTable = wikitable.findElements(new By.ByTagName("tr"));
+      String image = null;
+      for (WebElement fila : filasWikiTable) {
+        try {
+
+          System.out.println(fila.getText());
+          image = fila.findElement(new By.ByClassName("image")).getAttribute("href");
+
+          System.out.println(image);
+
+        }catch (NoSuchElementException e) {
+          System.out.println("Este Funko todabía no tiene imagen");
+
+        }
+        try {
+          BufferedWriter outputStream = new BufferedWriter(new FileWriter(new File("src/listaFunkos.csv"),true));
+
+          outputStream.write(fila.getText()+ "\n" + image + "\n");
+
+          outputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+    }
+
+   /* List<WebElement> filas = driver.findElements(new By.ByTagName("tr"));
     String image = null;
     for (WebElement fila : filas) {
       try {
@@ -58,7 +86,7 @@ public class Main {
         outputStream.close();
       } catch (IOException e) {
         e.printStackTrace();
-      }
+      }*/
 
 
     }
